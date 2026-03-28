@@ -1,0 +1,3 @@
+Derived from original work: ReportGenerator (https://github.com/danielpalme/ReportGenerator)
+Original license: Apache License, Version 2.0
+Original copyright: Copyright Daniel Palme (https://github.com/danielpalme)
