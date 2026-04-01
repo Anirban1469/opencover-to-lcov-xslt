@@ -65,12 +65,12 @@ SOFTWARE.
 				<xsl:text>&#xA;</xsl:text>
 			</xsl:for-each-group>
 
-			<!-- The number of functions found. -->
+			<!-- The number of functions found (FNF). -->
 			<xsl:text>FNF:</xsl:text>
 			<xsl:value-of select="count(distinct-values(current-group()/../../Name))" />
 			<xsl:text>&#xA;</xsl:text>
 
-			<!-- The number of functions hit. -->
+			<!-- The number of functions hit (FNH). -->
 			<xsl:text>FNH:</xsl:text>
 			<xsl:value-of select="count(distinct-values(current-group()/../..[@visited='true']/Name))" />
 			<xsl:text>&#xA;</xsl:text>
