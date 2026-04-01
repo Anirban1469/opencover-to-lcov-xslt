@@ -107,13 +107,13 @@ SOFTWARE.
 				<xsl:text>&#xA;</xsl:text>
 			</xsl:for-each>
 
-			<!-- The number of lines hit. -->
+			<!-- The number of lines hit (LH). -->
 			<xsl:text>LH:</xsl:text>
 			<xsl:value-of select="count(current-group()[name()='SequencePoint' and @vc>0])" />
 
 			<xsl:text>&#xA;</xsl:text>
 
-			<!-- The number of instrumented lines. -->
+			<!-- The number of instrumented lines (LF). -->
 			<xsl:text>LF:</xsl:text>
 			<xsl:value-of select="count(current-group()[name()='SequencePoint'])" />
 
