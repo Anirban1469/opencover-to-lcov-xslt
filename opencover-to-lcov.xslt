@@ -85,13 +85,13 @@ SOFTWARE.
 				<xsl:text>&#xA;</xsl:text>
 			</xsl:for-each>
 
-			<!-- The number of branches found. -->
+			<!-- The number of branches found (BRF). -->
 			<xsl:text>BRF:</xsl:text>
 			<xsl:value-of select="count(current-group()[name()='BranchPoint'])" />
 
 			<xsl:text>&#xA;</xsl:text>
 
-			<!-- The number of branches hit. -->
+			<!-- The number of branches hit (BRH). -->
 			<xsl:text>BRH:</xsl:text>
 			<xsl:value-of select="count(current-group()[name()='BranchPoint' and @vc>0])" />
 
