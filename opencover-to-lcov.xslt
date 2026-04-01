@@ -26,19 +26,26 @@ SOFTWARE.
 			   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="text" />
 
+	<!-- Details about the LCOV format can be found at https://manpages.debian.org/jessie/lcov/geninfo.1.en.html. -->
 	<xsl:template match="/">
+
+		<!-- Sorts the BranchPoints by their uspid attribute, and writes them as the test name (TN). -->
 		<xsl:text>TN:&#xA;</xsl:text>
 		<xsl:variable name="sorted-branchpoint-uspids"
 					  select="sort(descendant::BranchPoint/@uspid,(),function($id){($id/../../../../../../../Files/File[@uid=$id/../@fileid]/@fullPath,$id/../../../Name)})" />
 
+		<!-- Groups each test by its fileid attribute and selects its children of types BranchPoint and SequencePoint respectively. -->
 		<xsl:for-each-group group-by="@fileid"
 							select="descendant::BranchPoint|descendant::SequencePoint">
+
+			<!-- Sorts all file paths by the grouping key and writes them as the absolute paths of the source files (SF). -->
 			<xsl:sort select="../../../../../../Files/File[@uid=current-grouping-key()]/@fullPath" />
 			<xsl:text>SF:</xsl:text>
 			<xsl:value-of select="../../../../../../Files/File[@uid=current-grouping-key()]/@fullPath" />
 
 			<xsl:text>&#xA;</xsl:text>
 
+			<!-- Groups all sequence points by the grouping key and writes them as the function names (FN) along with their respective lines numbers using their sl attributes. -->
 			<xsl:for-each-group group-by="replace(../../Name,'^.*::(?:[gs]et_)?','')"
 								select="current-group()[name()='SequencePoint']">
 				<xsl:text>FN:</xsl:text>
@@ -48,6 +55,7 @@ SOFTWARE.
 				<xsl:text>&#xA;</xsl:text>
 			</xsl:for-each-group>
 
+			<!-- Groups all sequence points by the grouping key and writes them as the function names (FNDA) along with their execution counts using their vc attributes. -->
 			<xsl:for-each-group group-by="replace(../../Name,'^.*::(?:[gs]et_)?','')"
 								select="current-group()[name()='SequencePoint']">
 				<xsl:text>FNDA:</xsl:text>
@@ -57,14 +65,17 @@ SOFTWARE.
 				<xsl:text>&#xA;</xsl:text>
 			</xsl:for-each-group>
 
+			<!-- The number of functions found. -->
 			<xsl:text>FNF:</xsl:text>
 			<xsl:value-of select="count(distinct-values(current-group()/../../Name))" />
 			<xsl:text>&#xA;</xsl:text>
 
+			<!-- The number of functions hit. -->
 			<xsl:text>FNH:</xsl:text>
 			<xsl:value-of select="count(distinct-values(current-group()/../..[@visited='true']/Name))" />
 			<xsl:text>&#xA;</xsl:text>
 
+			<!-- Fill list of branch information (BRDA). -->
 			<xsl:for-each select="current-group()[name()='BranchPoint']">
 				<xsl:sort select="../../Name" />
 				<xsl:text>BRDA:</xsl:text>
@@ -74,16 +85,19 @@ SOFTWARE.
 				<xsl:text>&#xA;</xsl:text>
 			</xsl:for-each>
 
+			<!-- The number of branches found. -->
 			<xsl:text>BRF:</xsl:text>
 			<xsl:value-of select="count(current-group()[name()='BranchPoint'])" />
 
 			<xsl:text>&#xA;</xsl:text>
 
+			<!-- The number of branches hit. -->
 			<xsl:text>BRH:</xsl:text>
 			<xsl:value-of select="count(current-group()[name()='BranchPoint' and @vc>0])" />
 
 			<xsl:text>&#xA;</xsl:text>
 
+			<!-- Fill list of execution information (DA). -->
 			<xsl:for-each select="current-group()[name()='SequencePoint']">
 				<xsl:sort select="@sl" />
 				<xsl:text>DA:</xsl:text>
@@ -93,11 +107,13 @@ SOFTWARE.
 				<xsl:text>&#xA;</xsl:text>
 			</xsl:for-each>
 
+			<!-- The number of lines hit. -->
 			<xsl:text>LH:</xsl:text>
 			<xsl:value-of select="count(current-group()[name()='SequencePoint' and @vc>0])" />
 
 			<xsl:text>&#xA;</xsl:text>
 
+			<!-- The number of instrumented lines. -->
 			<xsl:text>LF:</xsl:text>
 			<xsl:value-of select="count(current-group()[name()='SequencePoint'])" />
 
